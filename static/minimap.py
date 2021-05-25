@@ -99,7 +99,7 @@ def draw_walls(canvas, objects, players):
 def get_image(canvas, output_file_name):
     final_image = Image.new("RGBA", (300,200), (0,0,0,0))
     final_image.paste(canvas, (0, 0), canvas)
-    final_image.save(output_file_name)
+    final_image.save(f'./static/{output_file_name}')
     return final_image
 
 def rotate(canvas, angle):
