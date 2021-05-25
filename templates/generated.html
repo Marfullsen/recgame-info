@@ -6,11 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Info</title>
 </head>
-<body>
+<body style="text-align: center;">
   <h1>Información obtenida del archivo: {{ filename }}</h1>
   <img src="{{ url_for('static', filename=source) }}" alt="Mapa Generado">
-  <textarea name="info_json" id="textarea" type="text" cols="30" rows="10">
-    {{ info_json }}
-  </textarea>
+  <br>
+  <textarea style="width: 90vw;height: calc(50vh);" name="info_json" id="textarea" type="text">{{ info_json }}</textarea>
 </body>
 </html>

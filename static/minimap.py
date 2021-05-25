@@ -6,6 +6,7 @@ import glob
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageColor
+import mgz
 from mgz.summary import Summary
 from mgz.const import MAP_SIZES
 
@@ -108,9 +109,66 @@ def rotate(canvas, angle):
 def resize(canvas, size):
     return canvas.resize(size)
 
+def get_info(input_file:str, sumario):
+    info = dict()
+    info['nombre_archivo'] = input_file
+    info['duracion_partida'] = mgz.util.convert_to_timestamp(sumario.get_duration()/1000)
+    info['punto_de_vista'] = sumario.get_players()[sumario.get_owner()-1]['name']
+    info['mapa_revelado'] = en_es['reveal_map'][sumario.get_settings()['map_reveal_choice'][1].capitalize()]
+    info['velocidad'] = en_es['game_speeds'][sumario.get_settings()['speed'][1].capitalize()]
+    info['poblacion'] = sumario.get_settings()['population_limit']
+    info['diplomacia'] = sumario.get_diplomacy()['type']
+    try:
+        info['nombre_mapa'] = en_es['map_names'][sumario.get_map()['name']]
+    except KeyError:
+        info['nombre_mapa'] = sumario.get_map()['name']
+    info['tamano_mapa'] = sumario.get_map()['size'].capitalize()
+    info['bloqueo_diplomacia_equipos'] = 1 if sumario.get_settings()['lock_teams'] else 0
+    info['dificultad'] = en_es['difficulties'][sumario.get_settings()['difficulty'][1].capitalize()]
+    
+    for map_size in en_es['map_sizes'].keys():
+            if info['tamano_mapa'] in map_size:
+                    info['tamano_mapa'] = en_es['map_sizes'][map_size]
+                    
+    info['teams'] = ''
+    if info['diplomacia'] == 'TG':
+        info['teams'] = sumario.get_diplomacy()['team_size']
+        info['diplomacia'] = 'Batalla de equipos'
+        
+    equipos = dict()
+    for index, team in enumerate(sumario.get_teams()):
+        index += 1
+        equipos[index] = dict()
+
+        for jugador in team:
+            equipos[index][jugador] = dict()
+            equipos[index][jugador]['nickname'] = sumario.get_players()[jugador-1]['name']
+
+            civ_cod = str(sumario.get_players()[jugador-1]['civilization'])
+            civ = sumario.reference['civilizations'][civ_cod]['name']
+
+            equipos[index][jugador]['civ_cod'] = civ_cod
+            equipos[index][jugador]['civ'] = en_es['civilizations'][civ]
+
+            if sumario.get_players()[jugador-1]['winner']:
+                equipos[index][jugador]['victoria'] = 0 # False
+            else:
+                equipos[index][jugador]['victoria'] = 1 # True
+
+            id_color = str(sumario.get_players()[jugador-1]['color_id'])
+            equipos[index][jugador]['color_cod'] = id_color
+
+            equipos[index][jugador]['color'] = mgz.reference.get_consts()['player_colors'][id_color]
+
+    info['equipos'] = equipos
+
+    return info
+
 def write_minimap(input_file: str) -> 'minimap_{file_name}.png':
     '''Generates the minimap'''
+    print(input_file)
     summary = get_data_from(input_file)
+    all_info = get_info(input_file, summary)
     resources = summary.get_header()['initial']['players'][0]['objects']
     map_info = summary.get_map()
     players = summary.get_players()
@@ -132,7 +190,11 @@ def write_minimap(input_file: str) -> 'minimap_{file_name}.png':
     output_file_name = f'minimap_{input_file[:-4]}.png'
     minimap = get_image(canvas, output_file_name)
     minimap.show()
+    return all_info
     
 if __name__== "__main__":
     for rec in get_savedgames():
         write_minimap(rec)
+    from en_to_es import en_es
+else:
+    from static.en_to_es import en_es
