@@ -14,7 +14,6 @@ def upload_file():
     uploaded_file = request.files['file']
     if uploaded_file.filename != '':
         uploaded_file.save(uploaded_file.filename)
-        info_json = 'holi'
         info_json = minimap.write_minimap(uploaded_file.filename)
     return render_template('generated.html', 
                             filename=uploaded_file.filename,
