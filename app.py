@@ -15,10 +15,20 @@ def upload_file():
     if uploaded_file.filename != '':
         uploaded_file.save(uploaded_file.filename)
         info_json = minimap.write_minimap(uploaded_file.filename)
+        write(info_json)
     return render_template('generated.html', 
                             filename=uploaded_file.filename,
                             source='minimap_'+uploaded_file.filename[:-4]+'.png', 
                             info_json=info_json)
 
+def write(info_json):
+    """Creates a Json file"""
+    pass
+
+def read():
+    """Reads a Json file"""
+    pass
+
 if __name__ == '__main__':
+    read()
    app.run(debug = True)
