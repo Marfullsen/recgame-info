@@ -2,6 +2,7 @@
 #-*- coding: utf-8 -*-
 import json, os
 from os import path
+from werkzeug.utils import secure_filename
 #.#.#
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 #.#.#
@@ -17,6 +18,11 @@ def index():
 
 @app.route('/get_data')
 def get_data():
+    return app.response_class(
+        response=json.dumps(data),
+        status=200,
+        mimetype='application/json'
+    )
     return jsonify(data)
 
 @app.route('/', methods=['POST'])
@@ -27,7 +33,8 @@ def upload_file():
         info_json = minimap.write_minimap(uploaded_file.filename)
         info_json['minimap'] = f'static/minimap_{info_json["nombre_archivo"][:-4]}.png'
         write_to_file(json_filename, data, info_json)
-        os.rename(uploaded_file.filename,f'./recs/{uploaded_file.filename}')
+        pov = secure_filename(info_json["punto_de_vista"])
+        os.rename(uploaded_file.filename,f'./recs/{pov}_{uploaded_file.filename}')
     return render_template('generated.html', 
                             filename=uploaded_file.filename,
                             source='minimap_'+uploaded_file.filename[:-4]+'.png', 
