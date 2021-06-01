@@ -1,9 +1,10 @@
-# recgame-info
+# Simple 'recgame info' using Flask
 [![Python](https://img.shields.io/badge/Python-3.9.5-blue.svg)](https://www.python.org/)
-[![Pillow](https://img.shields.io/badge/Pillow-8.0.0-green.svg)](https://pypi.org/project/Pillow/)
+[![Flask](https://img.shields.io/badge/Flask-2.0.1-red.svg)](https://pypi.org/project/mgz/)
+[![Pillow](https://img.shields.io/badge/Pillow-8.0.0-yellow.svg)](https://pypi.org/project/Pillow/)
 [![Mgz](https://img.shields.io/badge/Mgz-1.5.0-green.svg)](https://pypi.org/project/mgz/)
-[![Flask](https://img.shields.io/badge/Flask-2.0.1-green.svg)](https://pypi.org/project/mgz/)
 
+[![Screenshot](./screenshots/screenshot_001.png)]()
 ## Description
 Website to analyze AoE2 recgames.
 
@@ -41,6 +42,5 @@ You could get all the info scanned going to this url [localhost:5500/get_data](l
 [![Screenshot](./screenshots/step3.png)]()
 
 ## Special thanks.
-- GoFullPage (version 7.5)
-- Python3
-- HappyLeavesAoE
+- GoFullPage (Chrome extension)
+- Screely - [screely.com](https://www.screely.com/)
