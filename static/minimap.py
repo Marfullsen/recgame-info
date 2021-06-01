@@ -189,7 +189,7 @@ def write_minimap(input_file: str) -> 'minimap_{file_name}.png':
 
     output_file_name = f'minimap_{input_file[:-4]}.png'
     minimap = get_image(canvas, output_file_name)
-    minimap.show()
+    #minimap.show()
     return all_info
     
 if __name__== "__main__":
