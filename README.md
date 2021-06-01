@@ -8,8 +8,8 @@
 ## Description
 Website to analyze AoE2 recgames.
 
-## Using
-- Install Python3 [python.org]((https://www.python.org/))
+## Usage
+- Install Python3 [python.org](https://www.python.org/)
 - Install Flask `pip install flask`
 - Install mgz `pip install mgz`
 - Install Pillow `pip install pillow`
